@@ -3,7 +3,7 @@ private class MaintenanceRequestTest {
 
     @isTest
     static void create_a_new_request_when_the_current_one_is_closed() {
-        Case newCase = new Case(Subject = 'subject');
+        Case newCase = new Case(Subject = 'subject', Type = 'Repair');
         insert newCase;
         System.assertNotEquals(null, newCase.Id, 'The case was not created');
 
@@ -47,7 +47,7 @@ private class MaintenanceRequestTest {
         insert vehicle;
         System.assertNotEquals(null, vehicle.Id, 'The vehicle was not created');
         
-        Case newCase = new Case(Subject = 'subject');
+        Case newCase = new Case(Subject = 'subject', Type = 'Repair');
         newCase.Vehicle__c = vehicle.Id;
         insert newCase;
         System.assertNotEquals(null, newCase.Id, 'The case was not created');
@@ -79,7 +79,7 @@ private class MaintenanceRequestTest {
         insert equipment;
         System.assertNotEquals(null, equipment.Id, 'The equipment was not created');
         
-        Case newCase = new Case(Subject = 'subject');
+        Case newCase = new Case(Subject = 'subject', Type = 'Repair');
         newCase.Equipment__c = equipment.Id;
         insert newCase;
         System.assertNotEquals(null, newCase.Id, 'The case was not created');
@@ -107,7 +107,7 @@ private class MaintenanceRequestTest {
     @IsTest
     static void the_new_requests_type_should_be_set_as_routine_maintenance(){
         
-        Case newCase = new Case(Subject = 'subject');
+        Case newCase = new Case(Subject = 'subject', Type = 'Repair');
         insert newCase;
         System.assertNotEquals(null, newCase.Id, 'The case was not created');
 
@@ -123,12 +123,9 @@ private class MaintenanceRequestTest {
         update newCase;
         Test.stopTest();
 
-        Id routineMaintenanceRecordTypeId = Schema.SObjectType.Case.getRecordTypeInfosByName().get('Routine Maintenance').getRecordTypeId();
-        System.assertNotEquals(null, routineMaintenanceRecordTypeId, 'The record type Routine Maintenance does not exists');
-
         System.assertEquals(
-            2,
-            [SELECT count() FROM Case where RecordTypeId =: routineMaintenanceRecordTypeId],
+            1,
+            [SELECT count() FROM Case   WHERE Type = 'Routine Maintenance'],
             'The number of cases was not correct'
         );
     }
@@ -159,13 +156,13 @@ private class MaintenanceRequestTest {
         );
     }
 
-    @IsTest
+    /*@IsTest
     static void the_service_date_has_the_shortest_maintenance_cycle(){
         
         Test.startTest();
        
         Test.stopTest();
         
-    }
+    }*/
  
 }
